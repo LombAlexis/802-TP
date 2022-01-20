@@ -13,6 +13,6 @@ result = client.service.getCars()
 
 print(result)
 
-result = client.service.getInfo("Voiture")
+result = client.service.getInfo("Tesla Model 3")
 
 print(result)

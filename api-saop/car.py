@@ -24,13 +24,18 @@ class Car:
         cars = Car.loadCars()
         for car in cars:
             if (car.name == pName):
-                #Pour l'instant renvoie que le string mais plus tard on y séparera avec tout les attributs
-                yield str(car.name)
+                yield car.name
                 yield str(car.autonomy)
+                yield str(car.topSpeed)
+                yield str(car.efficiency)
+                yield str(car.fastCharge)
+                yield str(car.normalCharge)
+                yield str(car.capacity)
                 return
         yield "No cars found, check the name of the car"
         return
 
+    #Data come from here https://ev-database.org/car/1319/Dacia-Spring-Electric
     @staticmethod
     def loadCars():
         cars = []

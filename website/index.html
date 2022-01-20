@@ -8,38 +8,42 @@
     </head>
     <body>
         <h1>Exemple</h1>
-        <p>Test</p>
         <select name="cars" id="cars-select">
             <option value="">--Please choose a car--</option>
             <option value="1">Test 1</option>
             <option value="2">Test 2</option>
         </select>
-        <button id="button">Bouton :)</button>
+        <button id="select">Selectionner</button>
+        <div id="infos">Test</div>
     </body>
     <footer>
         <!-- <script src="main.js"></script> -->
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            var socket = io();
+            let socket = io();
         	let cars = document.getElementById("cars-select");
-            let button = document.getElementById("button");
-
-            console.log(cars)
-            console.log(button)
+            let buttonSelect = document.getElementById("select");
+            let infos = document.getElementById("infos");
 
             socket.on('cars', function (result) {
-                console.log("result")
-                console.log(result)
+                cars.innerHTML=''
+                result.getCarsResult.string.forEach(car => {
+                    cars.innerHTML+='<option value="' + car + '">' + car + '</option>'
+                });
             });
 
             socket.on('info', function (result) {
-                console.log("info")
-                console.log(result)
+                infos.innerHTML = 'Nom du véhicule: ' + result.getInfoResult.string[0]
+                infos.innerHTML += '<br>Autonomie: ' + result.getInfoResult.string[1] + 'Km'
+                infos.innerHTML += '<br>Vitesse maximal: ' + result.getInfoResult.string[2] + 'Km/h'
+                infos.innerHTML += '<br>Consomation électrique: ' + result.getInfoResult.string[3] + 'Wh/Km'
+                infos.innerHTML += '<br>Charge rapide: ' + result.getInfoResult.string[4] + 'W'
+                infos.innerHTML += '<br>Charge normal: ' + result.getInfoResult.string[5] + 'W'
+                infos.innerHTML += '<br>Capacité: ' + result.getInfoResult.string[6] + 'Wh'
             });
 
-            button.addEventListener("click", function() {
-                console.log("click")
-                socket.emit('car', 'Voiture');
+            buttonSelect.addEventListener("click", function() {
+                socket.emit('car', cars.value);
             });
 		</script>
     </footer>
