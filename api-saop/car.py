@@ -38,5 +38,6 @@ class Car:
         cars.append(Car("Dacia Spring Electric",170,125,158,34000,6600,26800))
         cars.append(Car("Kia EV6 GT",395,260,196,233000,11000,77400))
         cars.append(Car("BMW i4 eDrive40",475,190,170,200000,11000,80700))
+        cars.append(Car("Voiture",475,190,170,200000,11000,80700))
         
         return cars;
