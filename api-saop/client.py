@@ -12,3 +12,7 @@ print(result)
 result = client.service.getCars()
 
 print(result)
+
+result = client.service.getInfo("Voiture")
+
+print(result)

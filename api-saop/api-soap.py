@@ -19,6 +19,10 @@ class CarsService(ServiceBase):
     def getCars(ctx):
         return Car.getCarsName()
 
+    @rpc(Unicode, _returns=Iterable(Unicode))
+    def getInfo(ctx, name):
+        return Car.getCarInfo(name)
+
 application = Application([CarsService], 'spyne.cars.info',
                           in_protocol=Soap11(validator='lxml'),
                           out_protocol=Soap11())
