@@ -12,3 +12,6 @@ sinon always data /shrug
 openstreetmap
 https://nouvelle-techno.fr/articles/pas-a-pas-inserer-une-carte-openstreetmap-sur-votre-site
 https://wiki.openstreetmap.org/wiki/API_v0.6#API_calls
+
+
+<!-- TODO https://wiki.openstreetmap.org/wiki/Routing -->

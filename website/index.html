@@ -39,6 +39,10 @@
             <option value="1">100%</option>
         </select>
 
+        <label for="citySelected" class="col-form-label col-form-label-lg">Où voulez-vous vous rendre ?</label>
+        <input type="text" id="citySelected" name="citySelected" value="Chambéry">
+        <button id="calcul" class="btn btn-primary">Calculer</button>
+
         <div id="map"></div>
     </body>
 
@@ -50,6 +54,8 @@
         	let cars = document.getElementById("cars-select");
             let buttonSelect = document.getElementById("select");
             let infos = document.getElementById("infos");
+            let citySelected = document.getElementById("citySelected");
+            let calcul = document.getElementById("calcul");
 
             socket.on('cars', function (result) {
                 cars.innerHTML=''
@@ -72,16 +78,14 @@
             buttonSelect.addEventListener("click", function() {
                 socket.emit('car', cars.value);
             });
-
-
-
             
-            // On initialise la latitude et la longitude de Paris (centre de la carte)
-            var lat = 45.6423;
-            var lon = 5.8726;
-            var macarte = null;
             // Fonction d'initialisation de la carte
             function initMap() {
+                // On initialise la latitude et la longitude de Paris (centre de la carte)
+                var lat = 45.6423;
+                var lon = 5.8726;
+                var macarte = null;
+
                 // Créer l'objet "macarte" et l'insèrer dans l'élément HTML qui a l'ID "map"
                 macarte = L.map('map').setView([lat, lon], 15);
                 // Leaflet ne récupère pas les cartes (tiles) sur un serveur par défaut. Nous devons lui préciser où nous souhaitons les récupérer. Ici, openstreetmap.fr
@@ -91,11 +95,16 @@
                     minZoom: 1,
                     maxZoom: 20
                 }).addTo(macarte);
+                var marker = L.marker([lat, lon]).addTo(macarte); //pour placer un point 
             }
             window.onload = function(){
-		// Fonction d'initialisation qui s'exécute lorsque le DOM est chargé
-		initMap(); 
+                // Fonction d'initialisation qui s'exécute lorsque le DOM est chargé
+                initMap(); 
             };
+
+            calcul.addEventListener("click", function() {
+                console.log("click")
+            });
         
 		</script>
     </footer>
