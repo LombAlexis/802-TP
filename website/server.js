@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var soap = require('soap');
 var io = require('socket.io')(http);
 
-var url = 'http://127.0.0.1:8080/?wsdl';
+var url = 'https://calm-basin-70231.herokuapp.com/?wsdl';
 
 app.use(express.static(__dirname + '/public'));
 //On envoie la page html
