@@ -50,6 +50,10 @@
         </select>
         <button id="calcul" class="btn btn-primary">Calculer</button>
 
+        <div id="itinaryInfos" class="border">
+            <h2>Informations:</h2>
+        </div>
+
         <div id="map"></div>
     </body>
 
@@ -64,10 +68,17 @@
             let infos = document.getElementById("infos");
             let citySelected = document.getElementById("citySelected");
             let calcul = document.getElementById("calcul");
+            let itinaryInfos = document.getElementById("itinaryInfos");
 
             let map = L.map('map');
             let control = null;
-            let cities = [[45.5685,5.9204], [45.9014,6.1273], [45.1868,5.7350], [45.7570,4.8326], [48.8558,2.3509]];
+            let cities = [
+                ['Chambéry', 45.5685, 5.9204],
+                ['Annecy', 45.9014, 6.1273],
+                ['Grenoble', 45.1868, 5.7350],
+                ['Lyon', 45.7570, 4.8326],
+                ['Paris', 48.8558, 2.3509]
+            ];
 
             socket.on('cars', function (result) {
                 cars.innerHTML=''
@@ -101,7 +112,7 @@
                 if(control != null) {
                     control.getPlan().setWaypoints([
                         L.latLng(45.6423,5.8726),
-                        L.latLng(cities[citySelected][0], cities[citySelected][1])
+                        L.latLng(cities[citySelected][1], cities[citySelected][2])
                     ]);
                 }
                 else {
@@ -112,16 +123,25 @@
                     control = L.Routing.control({
                         waypoints: [
                             L.latLng(45.6423,5.8726),
-                            L.latLng(cities[citySelected][0], cities[citySelected][1])
+                            L.latLng(cities[citySelected][1], cities[citySelected][2])
                         ],
                         show: false
                     }).addTo(map);
 
                     control.on('routesfound', function(e) {
-                        var routes = e.routes;
-                        var summary = routes[0].summary; 
-                        console.log(summary.totalDistance) //en m 
-                        console.log(summary.totalTime) //en s
+                        let routes = e.routes;
+                        let summary = routes[0].summary; 
+                        let itinaryTime = summary.totalTime; //seconds
+                        let itinaryDistance = summary.totalDistance; //meters
+
+                        itinaryInfos.innerHTML = '<h2>Informations:</h2>'
+                        itinaryInfos.innerHTML += '<br>Distance: ' + Math.trunc(itinaryDistance / 100) / 10 + 'Km'
+
+                        let seconds = Math.trunc(itinaryTime % 60);
+                        let minutes = Math.trunc(itinaryTime / 60 % 60);
+                        let hours = Math.trunc(itinaryTime / 60 / 60);
+
+                        itinaryInfos.innerHTML += '<br>Temps moyen: ' + hours  + 'h ' + minutes + 'm ' + seconds + 's ';
                     });
                 }
             }
