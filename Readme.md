@@ -14,4 +14,4 @@ https://nouvelle-techno.fr/articles/pas-a-pas-inserer-une-carte-openstreetmap-su
 https://wiki.openstreetmap.org/wiki/API_v0.6#API_calls
 
 
-<!-- TODO https://wiki.openstreetmap.org/wiki/Routing -->
+For the interractive map, we have used https://www.liedman.net/leaflet-routing-machine/api/#l-routing-itinerary
