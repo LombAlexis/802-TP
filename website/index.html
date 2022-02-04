@@ -25,7 +25,7 @@
         <div id="infos" class="border">
             <h2>Caractéristiques:</h2>
         </div>
-        <label for="percent" class="col-form-label col-form-label-lg">Sélectionner à quel pourcentage vous souhaitez recherger votre véhicule</label>
+        <label for="percent" class="col-form-label col-form-label-lg">Sélectionnez à quel pourcentage vous souhaitez rechager votre véhicule</label>
         <select name="percent" id="percent-select">
             <option value="0">0%</option>
             <option value="1">10%</option>
@@ -90,12 +90,12 @@
             socket.on('info', function (result) {
                 infos.innerHTML = '<h2>Caractéristiques:</h2>'
                 infos.innerHTML += 'Nom du véhicule: ' + result.getInfoResult.string[0]
-                infos.innerHTML += '<br>Autonomie: ' + result.getInfoResult.string[1] + 'Km'
-                infos.innerHTML += '<br>Vitesse maximal: ' + result.getInfoResult.string[2] + 'Km/h'
-                infos.innerHTML += '<br>Consomation électrique: ' + result.getInfoResult.string[3] + 'Wh/Km'
-                infos.innerHTML += '<br>Charge rapide: ' + result.getInfoResult.string[4] + 'W'
-                infos.innerHTML += '<br>Charge normal: ' + result.getInfoResult.string[5] + 'W'
-                infos.innerHTML += '<br>Capacité: ' + result.getInfoResult.string[6] + 'Wh'
+                infos.innerHTML += '<br>Autonomie: ' + result.getInfoResult.string[1] + ' Km'
+                infos.innerHTML += '<br>Vitesse maximal: ' + result.getInfoResult.string[2] + ' Km/h'
+                infos.innerHTML += '<br>Consomation électrique: ' + result.getInfoResult.string[3] + ' Wh/Km'
+                infos.innerHTML += '<br>Charge rapide: ' + result.getInfoResult.string[4] + ' W'
+                infos.innerHTML += '<br>Charge normal: ' + result.getInfoResult.string[5] + ' W'
+                infos.innerHTML += '<br>Capacité: ' + result.getInfoResult.string[6] + ' Wh'
             });
 
             buttonSelect.addEventListener("click", function() {
@@ -146,6 +146,17 @@
                 }
             }
 
+
+            function borneRechargement(coords) {
+                socket.emit('borneDemande',coords);
+                socket.on('borneTrouve', function(result){
+                    var marker = L.marker([result[1], result[0]]).addTo(map);
+
+                });
+
+
+            }
+
             window.onload = function(){
                 initMap(); 
             };
@@ -153,6 +164,8 @@
             calcul.addEventListener("click", function() {
                 console.log("click");
                 initMap();
+                //manquera un truck ici pour get les coords voir avec baub
+                borneRechargement([45.9014, 6.1273]);
             });
         
 		</script>
