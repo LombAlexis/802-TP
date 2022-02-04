@@ -54,6 +54,8 @@
             <h2>Informations:</h2>
         </div>
 
+        <button id="test" class="btn btn-primary">test</button>
+
         <div id="map"></div>
     </body>
 
@@ -69,6 +71,9 @@
             let citySelected = document.getElementById("citySelected");
             let calcul = document.getElementById("calcul");
             let itinaryInfos = document.getElementById("itinaryInfos");
+
+            //! to delete later:
+            let test = document.getElementById("test");
 
             let map = L.map('map');
             let control = null;
@@ -105,8 +110,6 @@
             // Fonction d'initialisation de la carte
             function initMap() {
 
-                // var marker = L.marker([lat, lon]).addTo(macarte); //pour placer un point 
-
                 let citySelected = document.getElementById('citySelected').value;
 
                 if(control != null) {
@@ -130,6 +133,26 @@
 
                     control.on('routesfound', function(e) {
                         let routes = e.routes;
+                        
+                        let d = 0
+                        let coorAv = 0
+                        let coorAp = 0
+                        for(let i = 0; i < routes.length; i++) {
+                            console.log(routes[i]);
+
+                            for(let j = 1; j < routes[i].coordinates.length; j++) {
+                                if(d < 5000) {
+                                    coorAv = routes[i].coordinates[j-1];
+                                    coorAp = routes[i].coordinates[j];
+                                    d += distanceTwoPoint(coorAv.lng, coorAv.lat, coorAp.lng, coorAp.lat)
+                                }
+                            }                            
+                        }
+                        console.log("d")
+                        console.log(d)
+                        console.log(coorAp)
+                        displayElecStation(coorAp.lat, coorAp.lng);
+
                         let summary = routes[0].summary; 
                         let itinaryTime = summary.totalTime; //seconds
                         let itinaryDistance = summary.totalDistance; //meters
@@ -146,7 +169,6 @@
                 }
             }
 
-
             function borneRechargement(coords) {
                 socket.emit('borneDemande',coords);
                 socket.on('borneTrouve', function(result){
@@ -154,7 +176,61 @@
 
                 });
 
+            function displayElecStation(lat, lng) {
 
+                
+                var myIcon = L.icon({
+                    iconUrl: 'data:image/png;base64,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',
+                    iconSize: [20, 20],
+                    iconAnchor: [0, 0],
+                });
+                let marker = L.marker(
+                    [lat, lng],
+                    { icon: myIcon }
+                    ).addTo(map);
+
+                //marker.bindPopup('Electrical station');
+            }
+
+            function distanceTwoPoint(lon1, lat1, lon2, lat2) {
+                let R = 6371e3; // metres
+                let φ1 = lat1 * Math.PI/180; // φ, λ in radians
+                let φ2 = lat2 * Math.PI/180;
+                let Δφ = (lat2-lat1) * Math.PI/180;
+                let Δλ = (lon2-lon1) * Math.PI/180;
+
+                let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                        Math.cos(φ1) * Math.cos(φ2) *
+                        Math.sin(Δλ/2) * Math.sin(Δλ/2);
+                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+                return d = R * c;
+            }
+
+            function calculDistanceAsync(departure, arrived) {
+                return new Promise(resolve => {
+                    var wayPoint1 = L.latLng(departure[0], departure[1]);
+                    var wayPoint2 = L.latLng(arrived[0], arrived[1]);
+
+                    let rWP1 = new L.Routing.Waypoint;
+                    rWP1.latLng = wayPoint1;    
+
+                    let rWP2 = new L.Routing.Waypoint;
+                    rWP2.latLng = wayPoint2;    
+
+                    var myRoute = L.Routing.osrmv1();
+
+                    var distanceeee = -1;
+                    myRoute.route([rWP1, rWP2], function(err, routes) {
+                        distanceeee = routes[0].summary.totalDistance;
+                        resolve(distanceeee);
+                    });                    
+                });
+            }
+
+            async function calculDistance(departure, arrived) {
+                var x = await calculDistanceAsync(departure, arrived);
+                return x;
             }
 
             window.onload = function(){
@@ -167,7 +243,15 @@
                 //manquera un truck ici pour get les coords voir avec baub
                 borneRechargement([45.9014, 6.1273]);
             });
-        
+
+            test.addEventListener("click", function() {
+                console.log("test");
+                calculDistance([45.6423,5.8726], [45.5685, 5.9204]).then(
+                    (value) => {
+                        console.log(value)
+                    }
+                );
+            });
 		</script>
     </footer>
 </html>
