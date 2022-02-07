@@ -6,7 +6,6 @@ var io = require('socket.io')(http);
 var fetch = require('node-fetch');
 
 
-
 var url = 'https://calm-basin-70231.herokuapp.com/?wsdl';
 
 app.use(express.static(__dirname + '/public'));
@@ -15,8 +14,10 @@ app.get('/', function(req, res){ 			//! mettre le nom de la voiture dans l'url ?
 	res.sendFile(__dirname + '/index.html');
 });
 
-http.listen(80,function(){
-	console.log('server listen on 80 port');
+const PORT = process.env.PORT || 80;
+http.listen(PORT, err => {
+    if(err) throw err;
+    console.log("server listen on " + PORT + " port");
 });
 
 function carsList(io) {
