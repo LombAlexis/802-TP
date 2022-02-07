@@ -62,6 +62,14 @@ async function borneDemande(io,longitude,lattitude){
 	io.emit('borneTrouve', [longi,lati]);
 }
 
+
+async function tempsDemande(io,request){
+    let response = await fetch('https://testpythonrest.azurewebsites.net/tempsTrajet/'+request[0]+'/'+request[1]+'/'+request[2]+'/'+request[3]+'/'+request[4])
+    .catch(erreur => { throw erreur})
+    let myJson = await response.json()
+    io.emit('tempsTrouve', myJson);
+}
+
 io.on('connect', function(socket){
 	carsList(io);
 
@@ -71,6 +79,10 @@ io.on('connect', function(socket){
 
 	socket.on('borneDemande', function (coords) {
 		borneDemande(io,coords[0],coords[1]);
+	})
+
+	socket.on('tempsDemande',function(request){
+		tempsDemande(io,request);
 	})
 
 });
