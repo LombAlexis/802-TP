@@ -37,14 +37,16 @@ function carInfo(io, name) {
 	});
 }
 
-async function borneDemande(io,longitude,lattitude){
-	const response = await fetch('https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&rows=50&geofilter.distance='+ longitude +','+ lattitude +',1000')
+//https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&rows=50&geofilter.distance=45.6423,5.8726,1000
+async function borneDemande(io, longitude, lattitude, rayon){
+	const response = await fetch('https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&rows=50&geofilter.distance='+ longitude +','+ lattitude +','+rayon)
 	.catch(erreur => { throw erreur})
   	const myJson = await response.json()
 
 	//traitement json
 	let myData = [[],[]];
-	for (let i=0; i< myJson['nhits']; i++){
+	let max = myJson['nhits']>50?50:myJson['nhits'];
+	for (let i=0; i<max; i++){
 		myData[0].push(myJson['records'][i]['fields']['xlongitude'])
 		myData[1].push(myJson['records'][i]['fields']['ylatitude'])
 	}
@@ -53,7 +55,7 @@ async function borneDemande(io,longitude,lattitude){
 	let lati = 0
 	let moy = (longitude + lattitude) / 2
 
-	for (let i=0; i< myJson['nhits']; i++){
+	for (let i=0; i< max; i++){
 		if (moy > (myData[0][i] + myData[1][i])/2){
 			moy = ((myData[0][i] + myData[1][i])/2);
 			longi = myData[0][i]
@@ -71,7 +73,7 @@ io.on('connect', function(socket){
 	});
 
 	socket.on('borneDemande', function (coords) {
-		borneDemande(io,coords[0],coords[1]);
+		borneDemande(io,coords[0], coords[1], coords[2]);
 	})
 
 });
