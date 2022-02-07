@@ -70,6 +70,10 @@
             let percent = document.getElementById("percent-select").value;
             let autonomie;
 
+            let capacite = 1;
+            let conso = 1;
+            let recharge = 1;
+
             //! to delete later:
             let test = document.getElementById("test");
 
@@ -97,9 +101,12 @@
                 infos.innerHTML += '<br>Autonomie: ' + result.getInfoResult.string[1] + ' Km'
                 infos.innerHTML += '<br>Vitesse maximal: ' + result.getInfoResult.string[2] + ' Km/h'
                 infos.innerHTML += '<br>Consomation électrique: ' + result.getInfoResult.string[3] + ' Wh/Km'
+                conso=result.getInfoResult.string[3]
                 infos.innerHTML += '<br>Charge rapide: ' + result.getInfoResult.string[4] + ' W'
+                recharge=result.getInfoResult.string[4]
                 infos.innerHTML += '<br>Charge normal: ' + result.getInfoResult.string[5] + ' W'
                 infos.innerHTML += '<br>Capacité: ' + result.getInfoResult.string[6] + ' Wh'
+                capacite = result.getInfoResult.string[6]
             });
 
             buttonSelect.addEventListener("click", function() {
@@ -179,7 +186,14 @@
                         let minutes = Math.trunc(itinaryTime / 60 % 60);
                         let hours = Math.trunc(itinaryTime / 60 / 60);
 
-                        itinaryInfos.innerHTML += '<br>Temps moyen: ' + hours  + 'h ' + minutes + 'm ' + seconds + 's ';
+
+                        calculDistanceAvecRest(itinaryDistance/1000,(itinaryDistance/itinaryTime)*3.6);
+
+
+
+
+
+                        //itinaryInfos.innerHTML += '<br>Temps moyen: ' + hours  + 'h ' + minutes + 'm ' + seconds + 's ';
                     });
                 }
             }
@@ -217,6 +231,22 @@
                 let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
                 return d = R * c;
+            }
+
+            function calculDistanceAvecRest(km,vitesse) {
+                let request = [km,capacite,conso,recharge,vitesse]
+                console.log(request)
+
+                socket.emit('tempsDemande',request);
+                socket.on('tempsTrouve', function(result){
+                    let secondes = Math.trunc(result*60 % 60);
+                    let minutes = Math.trunc(result % 60);
+                    let hours = Math.trunc(result / 60);
+                    console.log(result);
+                    itinaryInfos.innerHTML = '<h2>Informations:</h2>'
+                    itinaryInfos.innerHTML += '<br>Distance: '+ km +' Km'
+                    itinaryInfos.innerHTML += '<br>Temps moyen: ' + hours  + 'h ' + minutes + 'm ' + secondes + 's ';
+                });
             }
 
             window.onload = function(){
