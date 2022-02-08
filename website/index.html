@@ -50,8 +50,6 @@
             <h2>Informations:</h2>
         </div>
 
-        <button id="test" class="btn btn-primary">test</button>
-
         <div id="map"></div>
     </body>
 
@@ -67,15 +65,11 @@
             let citySelected = document.getElementById("citySelected");
             let calcul = document.getElementById("calcul");
             let itinaryInfos = document.getElementById("itinaryInfos");
-            let percent = document.getElementById("percent-select").value;
             let autonomie;
 
             let capacite = 1;
             let conso = 1;
             let recharge = 1;
-
-            //! to delete later:
-            let test = document.getElementById("test");
 
             let map = L.map('map');
             let control = null;
@@ -123,6 +117,13 @@
                         L.latLng(45.6423,5.8726),
                         L.latLng(cities[citySelected][1], cities[citySelected][2])
                     ]);
+
+                    map.eachLayer(function(layer) {
+                        if (layer instanceof L.Marker)
+                        {
+                            map.removeLayer(layer)
+                        }
+                    })
                 }
                 else {
                     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -139,6 +140,7 @@
 
                     control.on('routesfound', function(e) {
                         let routes = e.routes;
+                        let percent = document.getElementById("percent-select").value;
 
                         if(autonomie == null) {
                             autonomie = 100000
@@ -155,7 +157,6 @@
                         let coorAv = 0
 
                         for(let i = 0; i < routes.length; i++) {
-                            //console.log(routes[i]);
                             for(let j = 1; j < routes[i].coordinates.length; j++) {
                                 if(d[indexD] < distanceBeforeCharge) {
                                     coorAv = routes[i].coordinates[j-1];
@@ -173,8 +174,6 @@
                             borneRechargement(tabCoord[i].lng, tabCoord[i].lat, distanceNeedCharge);
                         }
 
-                        //displayElecStation(coorAp.lat, coorAp.lng);
-
                         let summary = routes[0].summary; 
                         let itinaryTime = summary.totalTime; //seconds
                         let itinaryDistance = summary.totalDistance; //meters
@@ -186,14 +185,7 @@
                         let minutes = Math.trunc(itinaryTime / 60 % 60);
                         let hours = Math.trunc(itinaryTime / 60 / 60);
 
-
                         calculDistanceAvecRest(itinaryDistance/1000,(itinaryDistance/itinaryTime)*3.6);
-
-
-
-
-
-                        //itinaryInfos.innerHTML += '<br>Temps moyen: ' + hours  + 'h ' + minutes + 'm ' + seconds + 's ';
                     });
                 }
             }
@@ -202,7 +194,7 @@
                 socket.emit('borneDemande', [lat, lng, rayon]);
                 socket.on('borneTrouve', function(result){
                     displayElecStation(result[1], result[0])
-                    L.marker([lat, lng]).addTo(map); //marque l'endroit ou c'est nécessaire 
+                    //L.marker([lat, lng]).addTo(map); //marque l'endroit ou c'est nécessaire 
                 });
             }
 
@@ -235,14 +227,12 @@
 
             function calculDistanceAvecRest(km,vitesse) {
                 let request = [km,capacite,conso,recharge,vitesse]
-                console.log(request)
 
                 socket.emit('tempsDemande',request);
                 socket.on('tempsTrouve', function(result){
                     let secondes = Math.trunc(result*60 % 60);
                     let minutes = Math.trunc(result % 60);
                     let hours = Math.trunc(result / 60);
-                    console.log(result);
                     itinaryInfos.innerHTML = '<h2>Informations:</h2>'
                     itinaryInfos.innerHTML += '<br>Distance: '+ km +' Km'
                     itinaryInfos.innerHTML += '<br>Temps moyen: ' + hours  + 'h ' + minutes + 'm ' + secondes + 's ';
@@ -254,19 +244,7 @@
             };
 
             calcul.addEventListener("click", function() {
-                console.log("click");
                 initMap();
-                //manquera un truck ici pour get les coords voir avec baub
-                //borneRechargement([45.9014, 6.1273]);
-            });
-
-            test.addEventListener("click", function() {
-                console.log("test");
-                calculDistance([45.6423,5.8726], [45.5685, 5.9204]).then(
-                    (value) => {
-                        console.log(value)
-                    }
-                );
             });
 		</script>
     </footer>
