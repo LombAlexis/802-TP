@@ -149,6 +149,8 @@
                         let distanceBeforeCharge = (1 - parseInt(percent) / 100) * autonomie * 1000;
                         let distanceNeedCharge = parseInt(percent) / 100 * autonomie * 1000
 
+                        let capacitePercent = autonomie * conso * (1 - parseInt(percent) / 100);
+
                         let d = [];
                         let tabCoord = [];
                         d.push(0);
@@ -185,7 +187,7 @@
                         let minutes = Math.trunc(itinaryTime / 60 % 60);
                         let hours = Math.trunc(itinaryTime / 60 / 60);
 
-                        calculDistanceAvecRest(itinaryDistance/1000,(itinaryDistance/itinaryTime)*3.6);
+                        calculDistanceAvecRest(itinaryDistance/1000,(itinaryDistance/itinaryTime)*3.6, capacitePercent);
                     });
                 }
             }
@@ -225,8 +227,8 @@
                 return d = R * c;
             }
 
-            function calculDistanceAvecRest(km,vitesse) {
-                let request = [km,capacite,conso,recharge,vitesse]
+            function calculDistanceAvecRest(km,vitesse, capa) {
+                let request = [km,capa,conso,recharge,vitesse]
 
                 socket.emit('tempsDemande',request);
                 socket.on('tempsTrouve', function(result){
