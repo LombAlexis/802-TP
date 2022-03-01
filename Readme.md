@@ -1,22 +1,9 @@
+# CARRILLO Killian, LOMBARDI Alexis
 
-api-saop : http://127.0.0.1:8080/?wsdl
+## Nous avons utilisé:
+### Un serveur node pour notre site: https://serene-meadow-06255.herokuapp.com/ hébergé sur heroku
+### Une API SOAP: https://calm-basin-70231.herokuapp.com/CarsService?wsdl hébergé sur heroku
+### Une API REST: https://testpythonrest.azurewebsites.net/ hébergé sur azur
+### Une API pour la cartographie: https://fr.wikipedia.org/wiki/Leaflet
+### Une API pour les routes: https://www.liedman.net/leaflet-routing-machine/
 
-node server.js
-http://localhost:80/
-
-Pour héberger serveur python :
-https://www.heroku.com/
-
-sinon always data 
-
-openstreetmap
-https://nouvelle-techno.fr/articles/pas-a-pas-inserer-une-carte-openstreetmap-sur-votre-site
-https://wiki.openstreetmap.org/wiki/API_v0.6#API_calls
-
-
-For the interractive map, we have used :
-https://leafletjs.com/reference.html#map-example
-https://www.liedman.net/leaflet-routing-machine/api/#l-routing-itinerary
-
-retry :
-https://gis.stackexchange.com/questions/323310/leaflet-routing-machine-get-route-summary-without-drawind-route
