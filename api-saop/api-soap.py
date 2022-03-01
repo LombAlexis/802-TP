@@ -5,20 +5,14 @@ from spyne.server.wsgi import WsgiApplication
 from car import *
 
 class CarsService(ServiceBase):
-    @rpc(Unicode, Integer, _returns=Iterable(Unicode))
-    def say_hello(ctx, name, times):
-        for i in range(times):
-            yield u'Hello, %s' % name
-
-    @rpc(Integer, Integer, _returns=Integer)
-    def addition(ctx, a, b):
-            result = int(a) + int(b)
-            return result
-
+    #Retourne le nom des véhicules
+    #retourne un tableau de string
     @rpc(_returns=Iterable(Unicode))
     def getCars(ctx):
         return Car.getCarsName()
 
+    #Retourne les caractéristique d'un véhicule passé en paramètre
+    #retourne un tableau de int
     @rpc(Unicode, _returns=Iterable(Unicode))
     def getInfo(ctx, name):
         return Car.getCarInfo(name)

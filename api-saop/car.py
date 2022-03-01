@@ -1,3 +1,4 @@
+#Class car
 class Car:
     def __init__(self, name, autonomy, topSpeed, efficiency, fastCharge, normalCharge, capacity):
         self.name = name
@@ -11,6 +12,7 @@ class Car:
     def __str__(self):
      return str(self.name) + " " + str(self.autonomy)
 
+    #renvoie le nom des véhicules
     @staticmethod
     def getCarsName():
         names = []
@@ -19,6 +21,7 @@ class Car:
             names.append(car.name)
         return names;
 
+    #renvoie les caractéristiques
     @staticmethod
     def getCarInfo(pName):
         cars = Car.loadCars()
